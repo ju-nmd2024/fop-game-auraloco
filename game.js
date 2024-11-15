@@ -83,6 +83,15 @@ function starsGenerator(numberOfStars) {
   }
 }
 
+//Function to draw the stars
+//Taken help from Garrits videos
+function drawStars() {
+  for (let index in starsX) {
+    fill(255, 255, 255, starsAlpha[index] * 255);
+    ellipse(starsX[index], starsY[index], 3);
+  }
+}
+
 //Function for when the mouse is pressed
 function mousePressed() {
   if (state === "start") {
@@ -95,13 +104,7 @@ function mousePressed() {
 //Function for the start screen with the title, stars, and a start button
 function startScreen() {
   background(13, 29, 49);
-
-  //Randomizes stars
-  //Taken help from Garrits videos
-  for (let index in starsX) {
-    fill(255, 255, 255, starsAlpha[index] * 255);
-    ellipse(starsX[index], starsY[index], 3);
-  }
+  drawStars();
 
   //Start button
   fill(255, 255, 255);
@@ -123,16 +126,25 @@ function startScreen() {
   character(450, 250);
 }
 
-//Fucntion for the game screen
+//Function for the game screen
 function gameScreen() {
   background(13, 29, 49);
+  drawStars();
+
+  //Grass
+  fill(121, 159, 80);
+  rect(0, height - 200, width, 50);
 }
+
+//Function for the end screen
+function endScreen() {}
 
 //Draw function
 function draw() {
-  if (state === "start") {
+  /*if (state === "start") {
     startScreen();
   } else if (state === "game") {
     gameScreen();
-  }
+  }*/
+  gameScreen();
 }

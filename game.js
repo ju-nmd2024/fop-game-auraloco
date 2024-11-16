@@ -11,62 +11,105 @@ let starsAlpha = [];
 //Game state variables
 let state = "start";
 
-//Set up function with stars and canva size
+//Character position
+let characterX;
+let characterY;
+
+//Set up function with canvas size, stars generator, alien position,
+// person position
 function setup() {
   createCanvas(900, 900);
   starsGenerator(500);
+  resetAlienPos();
+  resetPersonPos();
 }
 
-//Alien character function
-function character(x, y) {
+//Function to reset the character position every game that starts
+function resetAlienPos() {
+  characterX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+  characterY = 70;
+}
+
+//Function to spawn the little person position every game that starts
+function resetPersonPos() {
+  personX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+  personY = 760;
+}
+
+//Function for the little person
+function person(x, y, s) {
+  fill(0, 0, 0);
+
+  ellipse(x, y - 150 * s, 50 * s);
+
+  push();
+  stroke(0, 0, 0);
+  strokeWeight(20 * s);
+  line(x, y - 150 * s, x, y - 60 * s);
+  line(x, y - 60 * s, x - 20 * s, y);
+  line(x, y - 60 * s, x + 20 * s, y);
+  line(x, y - 120 * s, x - 30 * s, y - 65 * s);
+  line(x, y - 120 * s, x + 30 * s, y - 65 * s);
+  pop();
+}
+
+//Alien function
+function alien(x, y, s) {
   noStroke();
 
   //Green light
   fill(183, 241, 120);
-  triangle(x - 100, y + 150, x, y + 50, x + 100, y + 150);
+  triangle(x - 100 * s, y + 150 * s, x, y + 50 * s, x + 100 * s, y + 150 * s);
 
   //Bottom bottom part
   fill(70, 70, 70);
 
-  ellipse(x, y + 45, 70, 40);
+  ellipse(x, y + 45 * s, 70 * s, 40 * s);
 
   //Bottom part
   fill(88, 88, 88);
 
-  ellipse(x, y + 10, 250, 80);
+  ellipse(x, y + 10 * s, 250 * s, 80 * s);
 
   //Middle part
   fill(121, 121, 120);
 
-  ellipse(x, y, 300, 60);
+  ellipse(x, y, 300 * s, 60 * s);
 
   //Upper part
   fill(90, 90, 90);
 
-  ellipse(x, y - 20, 150, 40);
+  ellipse(x, y - 20 * s, 150 * s, 40 * s);
 
   //Plop things. left to right
   fill(171, 175, 175);
 
-  ellipse(x - 135, y - 10, 15, 10);
-  ellipse(x - 115, y + 2, 15, 10);
-  ellipse(x - 90, y + 10, 15, 10);
-  ellipse(x - 60, y + 15, 15, 10);
-  ellipse(x - 30, y + 17, 15, 10);
-  ellipse(x, y + 17, 15, 10);
-  ellipse(x + 30, y + 17, 15, 10);
-  ellipse(x + 60, y + 15, 15, 10);
-  ellipse(x + 90, y + 10, 15, 10);
-  ellipse(x + 117, y + 3, 15, 10);
-  ellipse(x + 135, y - 10, 15, 10);
+  ellipse(x - 135 * s, y - 10 * s, 15 * s, 10 * s);
+  ellipse(x - 115 * s, y + 2 * s, 15 * s, 10 * s);
+  ellipse(x - 90 * s, y + 10 * s, 15 * s, 10 * s);
+  ellipse(x - 60 * s, y + 15 * s, 15 * s, 10 * s);
+  ellipse(x - 30 * s, y + 17 * s, 15 * s, 10 * s);
+  ellipse(x, y + 17 * s, 15 * s, 10 * s);
+  ellipse(x + 30 * s, y + 17 * s, 15 * s, 10 * s);
+  ellipse(x + 60 * s, y + 15 * s, 15 * s, 10 * s);
+  ellipse(x + 90 * s, y + 10 * s, 15 * s, 10 * s);
+  ellipse(x + 117 * s, y + 3 * s, 15 * s, 10 * s);
+  ellipse(x + 135 * s, y - 10 * s, 15 * s, 10 * s);
 
   //Glass cup
   fill(210, 242, 240);
 
   beginShape();
 
-  vertex(x - 50, y - 25);
-  bezierVertex(x - 10, y - 110, x + 40, y - 60, x + 50, y - 25);
+  vertex(x - 50 * s, y - 25 * s);
+  bezierVertex(
+    x - 10 * s,
+    y - 110 * s,
+    x + 40 * s,
+    y - 60 * s,
+    x + 50 * s,
+    y - 25 * s
+  );
 
   endShape();
 }
@@ -97,6 +140,7 @@ function drawStars() {
 function mousePressed() {
   if (state === "start") {
     if (mouseX > 350 && mouseX < 550 && mouseY > 650 && mouseY < 730) {
+      resetAlienPos();
       state = "game";
     }
   }
@@ -124,7 +168,7 @@ function startScreen() {
   text("Alien Invasion", 200, 200);
 
   //Alien
-  character(450, 400);
+  alien(450, 400, 1.5);
 }
 
 //Function for the game screen
@@ -135,6 +179,9 @@ function gameScreen() {
   //Grass
   fill(44, 95, 47);
   rect(0, height - 190, width, 150);
+
+  alien(characterX, characterY, 0.8);
+  person(personX, personY, 0.6);
 }
 
 //Function for the end screen
@@ -142,10 +189,10 @@ function endScreen() {}
 
 //Draw function
 function draw() {
-  /*if (state === "start") {
-    startScreen(); 
+  if (state === "start") {
+    startScreen();
   } else if (state === "game") {
     gameScreen();
-  }  */
-  gameScreen();
+  }
+  //gameScreen();
 }

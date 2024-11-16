@@ -13,7 +13,7 @@ let state = "start";
 
 //Set up function with stars and canva size
 function setup() {
-  createCanvas(900, 600);
+  createCanvas(900, 900);
   starsGenerator(500);
 }
 
@@ -23,7 +23,7 @@ function character(x, y) {
 
   //Green light
   fill(183, 241, 120);
-  triangle(350, 400, 450, 300, 550, 400);
+  triangle(x - 100, y + 150, x, y + 50, x + 100, y + 150);
 
   //Bottom bottom part
   fill(70, 70, 70);
@@ -45,7 +45,7 @@ function character(x, y) {
 
   ellipse(x, y - 20, 150, 40);
 
-  //Plop things, from left to right
+  //Plop things. left to right
   fill(171, 175, 175);
 
   ellipse(x - 135, y - 10, 15, 10);
@@ -62,6 +62,7 @@ function character(x, y) {
 
   //Glass cup
   fill(210, 242, 240);
+
   beginShape();
 
   vertex(x - 50, y - 25);
@@ -95,7 +96,7 @@ function drawStars() {
 //Function for when the mouse is pressed
 function mousePressed() {
   if (state === "start") {
-    if (mouseX > 350 && mouseX < 550 && mouseY > 450 && mouseY < 500) {
+    if (mouseX > 350 && mouseX < 550 && mouseY > 650 && mouseY < 730) {
       state = "game";
     }
   }
@@ -108,22 +109,22 @@ function startScreen() {
 
   //Start button
   fill(255, 255, 255);
-  rect(350, 450, 200, 80, 30);
+  rect(350, 650, 200, 80, 30);
   push();
   fill(0, 0, 0);
   textSize(30);
   textStyle(BOLD);
-  text("START", 400, 500);
+  text("START", 400, 700);
   pop();
 
   //Title
   fill(255, 255, 255);
   textSize(80);
   textStyle(BOLD);
-  text("Alien Invasion", 200, 150);
+  text("Alien Invasion", 200, 200);
 
   //Alien
-  character(450, 250);
+  character(450, 400);
 }
 
 //Function for the game screen
@@ -132,8 +133,8 @@ function gameScreen() {
   drawStars();
 
   //Grass
-  fill(121, 159, 80);
-  rect(0, height - 200, width, 50);
+  fill(44, 95, 47);
+  rect(0, height - 190, width, 150);
 }
 
 //Function for the end screen
@@ -142,9 +143,9 @@ function endScreen() {}
 //Draw function
 function draw() {
   /*if (state === "start") {
-    startScreen();
+    startScreen(); 
   } else if (state === "game") {
     gameScreen();
-  }*/
+  }  */
   gameScreen();
 }

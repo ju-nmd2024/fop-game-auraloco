@@ -15,6 +15,11 @@ let state = "start";
 let characterX;
 let characterY;
 
+//Alien movement variables
+let gravity = 1;
+let speedX = 5;
+let falling = true;
+
 //Set up function with canvas size, stars generator, alien position,
 // person position
 function setup() {
@@ -179,6 +184,8 @@ function gameScreen() {
   //Grass
   fill(44, 95, 47);
   rect(0, height - 190, width, 150);
+
+  //Alien falling
 
   alien(characterX, characterY, 0.8);
   person(personX, personY, 0.6);

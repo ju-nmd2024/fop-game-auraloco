@@ -16,7 +16,7 @@ let characterX;
 let characterY;
 
 //Alien movement variables
-let gravity = 1;
+let gravity = 2;
 let speedX = 5;
 let falling = true;
 
@@ -33,6 +33,7 @@ function setup() {
 function resetAlienPos() {
   characterX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
   characterY = 70;
+  falling = true;
 }
 
 //Function to spawn the little person position every game that starts
@@ -186,9 +187,25 @@ function gameScreen() {
   rect(0, height - 190, width, 150);
 
   //Alien falling
+  if (falling) {
+    characterY += gravity;
+    if (characterY + 150 * 0.8 >= height - 190) {
+      falling = false;
+      characterY = height;
+    }
+  }
 
+  //Alien movement left to right
+  if (keyIsDown(37) && characterX > 20) {
+    characterX -= speedX;
+  }
+  if (keyIsDown(39) && characterX < width - 50) {
+    characterX += speedX;
+  }
+
+  //Alien and peron drawn into random position
+  person(personX, personY, 0.5);
   alien(characterX, characterY, 0.8);
-  person(personX, personY, 0.6);
 }
 
 //Function for the end screen

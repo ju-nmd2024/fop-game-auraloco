@@ -11,9 +11,13 @@ let starsAlpha = [];
 //Game state variables
 let state = "start";
 
-//Character position
+//Alien position
 let characterX;
 let characterY;
+
+//Person position
+let personX;
+let personY;
 
 //Alien movement variables
 let gravity = 2;
@@ -184,26 +188,33 @@ function gameScreen() {
 
   //Grass
   fill(44, 95, 47);
-  rect(0, height - 190, width, 150);
+  rect(0, height - 190, width, 200);
 
   //Alien falling
   if (falling) {
     characterY += gravity;
     if (characterY + 150 * 0.8 >= height - 190) {
       falling = false;
-      characterY = height;
+      characterY = height - 190 - 150 * 0.8;
     }
   }
 
+  //Alien movement upwards
+  if (keyIsDown(38) && falling) {
+    gravity = max(0.1, gravity - 0.1);
+  } else {
+    gravity = min(2, gravity + 0.05);
+  }
+
   //Alien movement left to right
-  if (keyIsDown(37) && characterX > 20) {
+  if (keyIsDown(37) && characterX > (150 * 0.8) / 2) {
     characterX -= speedX;
   }
-  if (keyIsDown(39) && characterX < width - 50) {
+  if (keyIsDown(39) && characterX < width - (150 * 0.8) / 2) {
     characterX += speedX;
   }
 
-  //Alien and peron drawn into random position
+  //Alien and person drawn into random position
   person(personX, personY, 0.5);
   alien(characterX, characterY, 0.8);
 }

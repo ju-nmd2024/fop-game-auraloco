@@ -11,18 +11,21 @@ let starsAlpha = [];
 //Game state variables
 let state = "start";
 
+//Score variable
+let score = 0;
+
 //Alien position
 let characterX;
 let characterY;
 
-//Alien movement
+//Alien movement, falling and landing variables
 let gravity = 3;
 let speedX = 5;
 let falling = true;
 let landSpeed = 0;
 let minWSpeed = 1;
 let maxWSpeed = 2;
-let loseSpeed = 3;
+let loseSpeed = 2.1;
 
 //Person position
 let personX;
@@ -163,9 +166,17 @@ function drawStars() {
 }
 
 //Function for when the mouse is pressed
-//If the button start is pressed, the game starts
 function mousePressed() {
+  //If the button start in the start screen is pressed, the game starts
   if (state === "start") {
+    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
+      resetAlienPos();
+      state = "game";
+    }
+  }
+
+  //If the button restart in the end screens, the game restarts
+  if (state === "win" || state === "lose") {
     if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
       resetAlienPos();
       state = "game";
@@ -247,14 +258,24 @@ function gameScreen() {
 //Function to check the landing speed
 function checkLanding() {
   if (landSpeed >= minWSpeed && landSpeed <= maxWSpeed) {
+    if (
+      characterX > personX - 50 &&
+      characterX < personX + 50 &&
+      characterY >= personY - 150
+    ) {
+      score += 50;
+    } else {
+      score += 10;
+    }
     state = "win";
-  } else if (landSpeed === loseSpeed) {
+  } else if (landSpeed > maxWSpeed) {
     state = "lose";
   }
 }
 
 //Function for the end screen
 function endScreen() {
+  //Background color and stars
   background(13, 29, 49);
   drawStars();
 
@@ -264,11 +285,16 @@ function endScreen() {
   textStyle(BOLD);
 
   if (state === "win") {
-    text("YOU WIN!", width / 2 - 200, height / 2 - 200);
+    text("YOU WIN!", width / 2 - 190, height / 2 - 200);
   } else if (state === "lose") {
-    text("YOU LOSE!", width / 2 - 200, height / 2 - 200);
+    text("YOU LOSE!", width / 2 - 180, height / 2 - 200);
   }
 
+  //Score text
+  textSize(50);
+  text("SCORE: " + score, width / 2 - 110, height / 2);
+
+  //Restart button
   fill(255, 255, 255);
   rect(width / 2 - 100, height - 300, 200, 80, 30);
 

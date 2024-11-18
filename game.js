@@ -16,9 +16,13 @@ let characterX;
 let characterY;
 
 //Alien movement
-let gravity = 2;
+let gravity = 3;
 let speedX = 5;
 let falling = true;
+let landSpeed = 0;
+let minWSpeed = 1;
+let maxWSpeed = 2;
+let loseSpeed = 3;
 
 //Person position
 let personX;
@@ -42,6 +46,8 @@ function resetAlienPos() {
   characterX = width / 2;
   characterY = 70;
   falling = true;
+  gravity = 3;
+  landSpeed = 0;
 }
 
 //Function to spawn the little person in a random position every game that starts
@@ -160,7 +166,7 @@ function drawStars() {
 //If the button start is pressed, the game starts
 function mousePressed() {
   if (state === "start") {
-    if (mouseX > 350 && mouseX < 550 && mouseY > 650 && mouseY < 730) {
+    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
       resetAlienPos();
       state = "game";
     }
@@ -175,22 +181,22 @@ function startScreen() {
 
   //Start button
   fill(255, 255, 255);
-  rect(350, 650, 200, 80, 30);
+  rect(width / 2 - 100, height - 300, 200, 80, 30);
   push();
   fill(0, 0, 0);
   textSize(30);
   textStyle(BOLD);
-  text("START", 400, 700);
+  text("START", width / 2 - 50, height - 250);
   pop();
 
   //Title
   fill(255, 255, 255);
   textSize(80);
   textStyle(BOLD);
-  text("Alien Invasion", 200, 200);
+  text("Alien Invasion", width / 2 - 250, height / 2 - 250);
 
   //Alien
-  alien(450, 400, 1.5);
+  alien(width / 2, height / 2 - 100, 1.5);
 }
 
 //Function for the game screen
@@ -212,6 +218,9 @@ function gameScreen() {
   if (characterY + 150 * 0.8 >= height - 190) {
     falling = false;
     characterY = height - 190 - 150 * 0.8;
+
+    landSpeed = abs(gravity);
+    checkLanding();
   }
 
   //Making the alien thurst up for a safe landing
@@ -235,8 +244,41 @@ function gameScreen() {
   alien(characterX, characterY, 0.8);
 }
 
+//Function to check the landing speed
+function checkLanding() {
+  if (landSpeed >= minWSpeed && landSpeed <= maxWSpeed) {
+    state = "win";
+  } else if (landSpeed === loseSpeed) {
+    state = "lose";
+  }
+}
+
 //Function for the end screen
-function endScreen() {}
+function endScreen() {
+  background(13, 29, 49);
+  drawStars();
+
+  //Win text
+  fill(255, 255, 255);
+  textSize(70);
+  textStyle(BOLD);
+
+  if (state === "win") {
+    text("YOU WIN!", width / 2 - 200, height / 2 - 200);
+  } else if (state === "lose") {
+    text("YOU LOSE!", width / 2 - 200, height / 2 - 200);
+  }
+
+  fill(255, 255, 255);
+  rect(width / 2 - 100, height - 300, 200, 80, 30);
+
+  push();
+  fill(0, 0, 0);
+  textSize(30);
+  textStyle(BOLD);
+  text("RESTART", width / 2 - 65, height - 250);
+  pop();
+}
 
 //Draw function with the different states
 function draw() {
@@ -246,6 +288,8 @@ function draw() {
     startScreen();
   } else if (state === "game") {
     gameScreen();
+  } else if (state === "win" || state === "lose") {
+    endScreen();
   }
-  //gameScreen();
+  //startScreen();
 }

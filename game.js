@@ -15,32 +15,36 @@ let state = "start";
 let characterX;
 let characterY;
 
-//Person position
-let personX;
-let personY;
-
-//Alien movement variables
+//Alien movement
 let gravity = 2;
 let speedX = 5;
 let falling = true;
 
+//Person position
+let personX;
+let personY;
+
 //Set up function with canvas size, stars generator, alien position,
 // person position
 function setup() {
-  createCanvas(900, 900);
+  createCanvas(900, 800);
+
+  //Stars generator calling
   starsGenerator(500);
+
+  //Alien and peron position resets
   resetAlienPos();
   resetPersonPos();
 }
 
 //Function to reset the character position every game that starts
 function resetAlienPos() {
-  characterX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+  characterX = width / 2;
   characterY = 70;
   falling = true;
 }
 
-//Function to spawn the little person position every game that starts
+//Function to spawn the little person in a random position every game that starts
 function resetPersonPos() {
   personX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
   personY = 760;
@@ -50,14 +54,19 @@ function resetPersonPos() {
 function person(x, y, s) {
   fill(0, 0, 0);
 
+  //Head
   ellipse(x, y - 150 * s, 50 * s);
 
+  //Rest of body
   push();
   stroke(0, 0, 0);
   strokeWeight(20 * s);
+  //Body
   line(x, y - 150 * s, x, y - 60 * s);
+  //Legs
   line(x, y - 60 * s, x - 20 * s, y);
   line(x, y - 60 * s, x + 20 * s, y);
+  //Arms
   line(x, y - 120 * s, x - 30 * s, y - 65 * s);
   line(x, y - 120 * s, x + 30 * s, y - 65 * s);
   pop();
@@ -125,6 +134,7 @@ function alien(x, y, s) {
 }
 
 //Function to generate randomized stars in the background
+//Taken help from Garrits videos
 function starsGenerator(numberOfStars) {
   for (let i = 0; i < numberOfStars; i++) {
     const x = Math.floor(Math.random() * width);
@@ -147,6 +157,7 @@ function drawStars() {
 }
 
 //Function for when the mouse is pressed
+//If the button start is pressed, the game starts
 function mousePressed() {
   if (state === "start") {
     if (mouseX > 350 && mouseX < 550 && mouseY > 650 && mouseY < 730) {
@@ -158,6 +169,7 @@ function mousePressed() {
 
 //Function for the start screen with the title, stars, and a start button
 function startScreen() {
+  //Background color with the stars
   background(13, 29, 49);
   drawStars();
 
@@ -183,38 +195,42 @@ function startScreen() {
 
 //Function for the game screen
 function gameScreen() {
+  //Backgorund color with the stars
   background(13, 29, 49);
   drawStars();
 
-  //Grass
+  //Grass on the bottom
   fill(44, 95, 47);
-  rect(0, height - 190, width, 200);
+  rect(0, height - 190, width, 50);
 
   //Alien falling
   if (falling) {
     characterY += gravity;
-    if (characterY + 150 * 0.8 >= height - 190) {
-      falling = false;
-      characterY = height - 190 - 150 * 0.8;
-    }
   }
 
-  //Alien movement upwards
+  //If alien has landed on grass
+  if (characterY + 150 * 0.8 >= height - 190) {
+    falling = false;
+    characterY = height - 190 - 150 * 0.8;
+  }
+
+  //Making the alien thurst up for a safe landing
   if (keyIsDown(38) && falling) {
-    gravity = max(0.1, gravity - 0.1);
+    gravity = max(-2, gravity - 0.8);
   } else {
-    gravity = min(2, gravity + 0.05);
+    gravity = min(3, gravity + 0.05);
   }
 
   //Alien movement left to right
   if (keyIsDown(37) && characterX > (150 * 0.8) / 2) {
     characterX -= speedX;
   }
-  if (keyIsDown(39) && characterX < width - (150 * 0.8) / 2) {
+  if (keyIsDown(39) && characterX < width - (400 * 0.8) / 2) {
     characterX += speedX;
   }
 
-  //Alien and person drawn into random position
+  //Alien and person drawn into random each time the game starts
+  //Set scaling
   person(personX, personY, 0.5);
   alien(characterX, characterY, 0.8);
 }
@@ -222,8 +238,10 @@ function gameScreen() {
 //Function for the end screen
 function endScreen() {}
 
-//Draw function
+//Draw function with the different states
 function draw() {
+  //Starts with the start screen until button is pressed
+  //If button is presed then game screen appears
   if (state === "start") {
     startScreen();
   } else if (state === "game") {

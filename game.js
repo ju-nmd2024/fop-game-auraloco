@@ -18,7 +18,7 @@ let score = 0;
 let characterX;
 let characterY;
 
-//Alien movement, falling and landing variables
+//Alien movement and falling variables
 let gravity = 3;
 let speedX = 5;
 let falling = true;
@@ -236,9 +236,9 @@ function gameScreen() {
 
   //Making the alien thurst up for a safe landing
   if (keyIsDown(38) && falling) {
-    gravity = max(-2, gravity - 0.8);
+    gravity = max(-2.5, gravity - 0.8);
   } else {
-    gravity = min(3, gravity + 0.05);
+    gravity = min(5, gravity + 0.05);
   }
 
   //Alien movement left to right
@@ -285,7 +285,7 @@ function endScreen() {
   textStyle(BOLD);
 
   if (state === "win") {
-    text("YOU WIN!", width / 2 - 190, height / 2 - 200);
+    text("YOU WIN!", width / 2 - 150, height / 2 - 200);
   } else if (state === "lose") {
     text("YOU LOSE!", width / 2 - 180, height / 2 - 200);
   }

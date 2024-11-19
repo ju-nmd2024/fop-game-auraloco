@@ -1,6 +1,6 @@
 /*Moon lander game with a alien theme*/
 
-//No stroke for better visuals
+//No stroke for better visuals (in my opinion)
 noStroke();
 
 //Stars variables
@@ -8,10 +8,9 @@ let starsX = [];
 let starsY = [];
 let starsAlpha = [];
 
-//Game state variables
+//Game state, timer and score variable
 let state = "start";
-
-//Score variable
+let timer = 0;
 let score = 0;
 
 //Alien position
@@ -31,8 +30,8 @@ let loseSpeed = 2.1;
 let personX;
 let personY;
 
-//Set up function with canvas size, stars generator, alien position,
-// person position
+//Function to set up canvas size, stars generator, alien position,
+//and person position
 function setup() {
   createCanvas(900, 800);
 
@@ -44,7 +43,51 @@ function setup() {
   resetPersonPos();
 }
 
-//Function to reset the character position every game that starts
+//Function to generate randomized stars in the background
+//Taken help from Garrits videos
+function starsGenerator(numberOfStars) {
+  for (let i = 0; i < numberOfStars; i++) {
+    const x = Math.floor(Math.random() * width);
+    const y = Math.floor(Math.random() * height);
+    const alpha = Math.random();
+
+    starsX.push(x);
+    starsY.push(y);
+    starsAlpha.push(alpha);
+  }
+}
+
+//Function to draw the stars
+//Taken help from Garrits videos
+function drawStars() {
+  for (let index in starsX) {
+    //Filling color white and some are more transparent than others
+    fill(255, 255, 255, starsAlpha[index] * 255);
+    ellipse(starsX[index], starsY[index], 3);
+  }
+}
+
+//Function for when the mouse is pressed
+//Taken helpl from Garrits assingments
+function mousePressed() {
+  //If the button start in the start screen is pressed, the intro screen is shown
+  if (state === "start") {
+    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
+      resetAlienPos();
+      state = "intro";
+    }
+  }
+
+  //If the button restart in the end screens, the game restarts
+  if (state === "win" || state === "lose") {
+    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
+      resetAlienPos();
+      state = "game";
+    }
+  }
+}
+
+//Function to reset the character position on every game that starts
 function resetAlienPos() {
   characterX = width / 2;
   characterY = 70;
@@ -57,6 +100,26 @@ function resetAlienPos() {
 function resetPersonPos() {
   personX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
   personY = 760;
+}
+
+//Function to check the landing speed
+function checkLanding() {
+  //If the speed is at a safe point it earns points on the score and the win screen is shown
+  //If the speed is not safe it doesn't earn any points and the loose screen is shown
+  if (landSpeed >= minWSpeed && landSpeed <= maxWSpeed) {
+    if (
+      characterX > personX - 50 &&
+      characterX < personX + 50 &&
+      characterY >= personY - 150
+    ) {
+      score += 50;
+    } else {
+      score += 10;
+    }
+    state = "win";
+  } else if (landSpeed > maxWSpeed) {
+    state = "lose";
+  }
 }
 
 //Function for the little person
@@ -142,48 +205,6 @@ function alien(x, y, s) {
   endShape();
 }
 
-//Function to generate randomized stars in the background
-//Taken help from Garrits videos
-function starsGenerator(numberOfStars) {
-  for (let i = 0; i < numberOfStars; i++) {
-    const x = Math.floor(Math.random() * width);
-    const y = Math.floor(Math.random() * height);
-    const alpha = Math.random();
-
-    starsX.push(x);
-    starsY.push(y);
-    starsAlpha.push(alpha);
-  }
-}
-
-//Function to draw the stars
-//Taken help from Garrits videos
-function drawStars() {
-  for (let index in starsX) {
-    fill(255, 255, 255, starsAlpha[index] * 255);
-    ellipse(starsX[index], starsY[index], 3);
-  }
-}
-
-//Function for when the mouse is pressed
-function mousePressed() {
-  //If the button start in the start screen is pressed, the game starts
-  if (state === "start") {
-    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
-      resetAlienPos();
-      state = "game";
-    }
-  }
-
-  //If the button restart in the end screens, the game restarts
-  if (state === "win" || state === "lose") {
-    if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
-      resetAlienPos();
-      state = "game";
-    }
-  }
-}
-
 //Function for the start screen with the title, stars, and a start button
 function startScreen() {
   //Background color with the stars
@@ -210,6 +231,87 @@ function startScreen() {
   alien(width / 2, height / 2 - 100, 1.5);
 }
 
+//Screen that shows how to play
+function introScreen() {
+  //Set background and draw stars
+  background(13, 29, 49);
+  drawStars();
+
+  //Title, how to play
+  fill(255, 255, 255);
+  textSize(70);
+  textStyle(BOLD);
+  text("HOW TO PLAY", width / 2 - 230, height / 2 - 300);
+
+  //Instructions
+  textSize(30);
+  textStyle(NORMAL);
+  text(
+    "Use the arrow keys to move the alien left and right.",
+    width / 2 - 350,
+    height / 2 - 100
+  );
+  text(
+    "Press up to control the landing speed.",
+    width / 2 - 350,
+    height / 2 + 50
+  );
+  text(
+    "Land safely on the grass to earn 10 points, \nland safely on the person to earn 50 points!",
+    width / 2 - 350,
+    height / 2 + 150
+  );
+
+  //Big red text on bottom
+  fill(255, 0, 0);
+  textStyle(BOLD);
+  textSize(50);
+  text("Avoid crashig into the ground!", width / 2 - 350, height / 2 + 300);
+
+  //Small white rectangles
+  fill(255, 255, 255);
+  rect(width / 2 - 350, height / 2 - 200, 60, 60, 10);
+  rect(width / 2 - 280, height / 2 - 200, 60, 60, 10);
+  rect(width / 2 - 350, height / 2 - 50, 60, 60, 10);
+
+  //Small arrows in the rectangles
+  //Lines
+  push();
+  stroke(0, 0, 0);
+  strokeWeight(5);
+  line(width / 2 - 330, height / 2 - 168, width / 2 - 295, height / 2 - 168);
+  line(width / 2 - 275, height / 2 - 168, width / 2 - 230, height / 2 - 168);
+  line(width / 2 - 319, height / 2 - 30, width / 2 - 319, height / 2);
+  pop();
+
+  //Triangles
+  fill(0, 0, 0);
+  triangle(
+    width / 2 - 325,
+    height / 2 - 150,
+    width / 2 - 345,
+    height / 2 - 170,
+    width / 2 - 325,
+    height / 2 - 185
+  );
+  triangle(
+    width / 2 - 245,
+    height / 2 - 150,
+    width / 2 - 225,
+    height / 2 - 170,
+    width / 2 - 245,
+    height / 2 - 185
+  );
+  triangle(
+    width / 2 - 335,
+    height / 2 - 25,
+    width / 2 - 320,
+    height / 2 - 47,
+    width / 2 - 305,
+    height / 2 - 25
+  );
+}
+
 //Function for the game screen
 function gameScreen() {
   //Backgorund color with the stars
@@ -218,14 +320,14 @@ function gameScreen() {
 
   //Grass on the bottom
   fill(44, 95, 47);
-  rect(0, height - 190, width, 50);
+  rect(0, height - 190, width, 100);
 
   //Alien falling
   if (falling) {
     characterY += gravity;
   }
 
-  //If alien has landed on grass
+  //If alien has landed on grass the falling stops
   if (characterY + 150 * 0.8 >= height - 190) {
     falling = false;
     characterY = height - 190 - 150 * 0.8;
@@ -234,7 +336,7 @@ function gameScreen() {
     checkLanding();
   }
 
-  //Making the alien thurst up for a safe landing
+  //Making the alien thrust up for a safe landing
   if (keyIsDown(38) && falling) {
     gravity = max(-2.5, gravity - 0.8);
   } else {
@@ -249,28 +351,9 @@ function gameScreen() {
     characterX += speedX;
   }
 
-  //Alien and person drawn into random each time the game starts
-  //Set scaling
+  //Alien and person drawn each time the game starts
   person(personX, personY, 0.5);
   alien(characterX, characterY, 0.8);
-}
-
-//Function to check the landing speed
-function checkLanding() {
-  if (landSpeed >= minWSpeed && landSpeed <= maxWSpeed) {
-    if (
-      characterX > personX - 50 &&
-      characterX < personX + 50 &&
-      characterY >= personY - 150
-    ) {
-      score += 50;
-    } else {
-      score += 10;
-    }
-    state = "win";
-  } else if (landSpeed > maxWSpeed) {
-    state = "lose";
-  }
 }
 
 //Function for the end screen
@@ -279,7 +362,7 @@ function endScreen() {
   background(13, 29, 49);
   drawStars();
 
-  //Win text
+  //Win and lose text
   fill(255, 255, 255);
   textSize(70);
   textStyle(BOLD);
@@ -309,13 +392,22 @@ function endScreen() {
 //Draw function with the different states
 function draw() {
   //Starts with the start screen until button is pressed
-  //If button is presed then game screen appears
+  //If button is presed then intro screen appears
+  //After 200 frames it switches to the game
+  //If alien has landed safely it'll show Win screen
+  //If alien doesn't land safely it shows lose screen
   if (state === "start") {
     startScreen();
+  } else if (state === "intro") {
+    introScreen();
+    timer = timer + 1;
+    if (timer >= 200) {
+      timer = 0;
+      state = "game";
+    }
   } else if (state === "game") {
     gameScreen();
   } else if (state === "win" || state === "lose") {
     endScreen();
   }
-  //startScreen();
 }

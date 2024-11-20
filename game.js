@@ -33,7 +33,7 @@ let personY;
 //Function to set up canvas size, stars generator, alien position,
 //and person position
 function setup() {
-  createCanvas(900, 800);
+  createCanvas(900, 900);
 
   //Stars generator calling
   starsGenerator(500);
@@ -68,7 +68,7 @@ function drawStars() {
 }
 
 //Function for when the mouse is pressed
-//Taken helpl from Garrits assingments
+//Taken help from Garrits assingments
 function mousePressed() {
   //If the button start in the start screen is pressed, the intro screen is shown
   if (state === "start") {
@@ -78,7 +78,7 @@ function mousePressed() {
     }
   }
 
-  //If the button restart in the end screens, the game restarts
+  //If the button "restart" is pressed in the end screen, the game restarts
   if (state === "win" || state === "lose") {
     if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
       resetAlienPos();
@@ -320,7 +320,7 @@ function gameScreen() {
 
   //Grass on the bottom
   fill(44, 95, 47);
-  rect(0, height - 190, width, 100);
+  rect(0, height - 190, width, 150);
 
   //Alien falling
   if (falling) {

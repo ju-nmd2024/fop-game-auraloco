@@ -33,7 +33,7 @@ let personY;
 //Function to set up canvas size, stars generator, alien position,
 //and person position
 function setup() {
-  createCanvas(900, 900);
+  createCanvas(900, 800);
 
   //Stars generator calling
   starsGenerator(500);

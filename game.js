@@ -37,10 +37,6 @@ function setup() {
 
   //Stars generator calling
   starsGenerator(500);
-
-  //Alien and peron position resets
-  resetAlienPos();
-  resetPersonPos();
 }
 
 //Function to generate randomized stars in the background
@@ -71,17 +67,21 @@ function drawStars() {
 //Taken help from Garrits assingments
 function mousePressed() {
   //If the button start in the start screen is pressed, the intro screen is shown
+  //and the alien and person position is placed in the game screen
   if (state === "start") {
     if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
       resetAlienPos();
+      resetPersonPos();
       state = "intro";
     }
   }
 
   //If the button "restart" is pressed in the end screen, the game restarts
+  //And the alien and person position is placed in the game screen
   if (state === "win" || state === "lose") {
     if (mouseX > 360 && mouseX < 570 && mouseY > 640 && mouseY < 730) {
       resetAlienPos();
+      resetPersonPos();
       state = "game";
     }
   }
@@ -98,7 +98,7 @@ function resetAlienPos() {
 
 //Function to spawn the little person in a random position every game that starts
 function resetPersonPos() {
-  personX = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+  personX = Math.floor(Math.random() * (width - 100)) + 100;
   personY = 760;
 }
 
@@ -375,7 +375,7 @@ function endScreen() {
 
   //Score text
   textSize(50);
-  text("SCORE: " + score, width / 2 - 110, height / 2);
+  text("SCORE: " + score, width / 2 - 120, height / 2);
 
   //Restart button
   fill(255, 255, 255);

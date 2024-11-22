@@ -27,7 +27,7 @@ let characterX;
 let characterY;
 
 //Alien movement and falling variables
-let gravity = 3;
+let gravity = 2;
 let speedX = 5;
 let falling = true;
 let landSpeed = 0;
@@ -98,8 +98,8 @@ function resetAlienPos() {
 
 //Function to spawn the little person in a random position every game that starts
 function resetPersonPos() {
-  personX = Math.floor(Math.random() * (width - 100)) + 100;
-  personY = 760;
+  personX = Math.floor(Math.random() * (width - 150)) + 100;
+  personY = 670;
 }
 
 //Function to check the landing speed
@@ -110,7 +110,7 @@ function checkLanding() {
     if (
       characterX > personX - 50 &&
       characterX < personX + 50 &&
-      characterY >= personY - 150
+      characterY >= personY - 180
     ) {
       score += 50;
     } else {
@@ -213,12 +213,12 @@ function startScreen() {
 
   //Start button
   fill(255, 255, 255);
-  rect(width / 2 - 100, height - 200, 200, 80, 30);
+  rect(width / 2 - 100, height - 180, 200, 80, 30);
   push();
   fill(0, 0, 0);
   textSize(30);
   textStyle(BOLD);
-  text("START", width / 2 - 50, height - 150);
+  text("START", width / 2 - 50, height - 130);
   pop();
 
   //Title
@@ -252,7 +252,7 @@ function introScreen() {
     height / 2 - 100
   );
   text(
-    "Press up to control the landing speed.",
+    "Press space to control the landing speed.",
     width / 2 - 350,
     height / 2 + 50
   );
@@ -311,7 +311,7 @@ function gameScreen() {
 
   //Grass on the bottom
   fill(44, 95, 47);
-  rect(0, height - 190, width, 150);
+  rect(0, height - 130, width, 150);
 
   //Alien falling
   if (falling) {
@@ -319,9 +319,9 @@ function gameScreen() {
   }
 
   //If alien has landed on grass the falling stops
-  if (characterY + 150 * 0.8 >= height - 190) {
+  if (characterY + 100 * 0.8 >= height - 170) {
     falling = false;
-    characterY = height - 190 - 150 * 0.8;
+    characterY = height - 170 - 150 * 0.8;
 
     landSpeed = abs(gravity);
     checkLanding();
@@ -331,7 +331,7 @@ function gameScreen() {
   if (keyIsDown(32) && falling) {
     gravity = max(-2.5, gravity - 0.8);
   } else {
-    gravity = min(5, gravity + 0.05);
+    gravity = min(4, gravity + 0.05);
   }
 
   //Alien movement left to right
@@ -370,13 +370,13 @@ function endScreen() {
 
   //Restart button
   fill(255, 255, 255);
-  rect(width / 2 - 100, height - 300, 200, 80, 30);
+  rect(width / 2 - 100, height - 180, 200, 80, 30);
 
   push();
   fill(0, 0, 0);
   textSize(30);
   textStyle(BOLD);
-  text("RESTART", width / 2 - 65, height - 250);
+  text("RESTART", width / 2 - 65, height - 130);
   pop();
 }
 

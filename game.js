@@ -335,7 +335,7 @@ function gameScreen() {
   }
 
   //Making the alien thrust up for a safe landing
-  if (keyIsDown(38) && falling) {
+  if (keyIsDown(32) && falling) {
     gravity = max(-2.5, gravity - 0.8);
   } else {
     gravity = min(5, gravity + 0.05);

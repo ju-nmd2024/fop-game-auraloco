@@ -6,9 +6,11 @@ function setup() {
 
   //Stars generator calling
   starsGenerator(500);
+  //No stroke for better visuals (in my opinion)
+  noStroke();
+  width = 900;
+  height = 800;
 }
-//No stroke for better visuals (in my opinion)
-noStroke();
 
 //Stars variables
 let starsX = [];
@@ -211,12 +213,12 @@ function startScreen() {
 
   //Start button
   fill(255, 255, 255);
-  rect(width / 2 - 100, height - 300, 200, 80, 30);
+  rect(width / 2 - 100, height - 200, 200, 80, 30);
   push();
   fill(0, 0, 0);
   textSize(30);
   textStyle(BOLD);
-  text("START", width / 2 - 50, height - 250);
+  text("START", width / 2 - 50, height - 150);
   pop();
 
   //Title
@@ -270,7 +272,7 @@ function introScreen() {
   fill(255, 255, 255);
   rect(width / 2 - 350, height / 2 - 200, 60, 60, 10);
   rect(width / 2 - 280, height / 2 - 200, 60, 60, 10);
-  rect(width / 2 - 350, height / 2 - 50, 60, 60, 10);
+  rect(width / 2 - 350, height / 2 - 50, 150, 60, 10);
 
   //Small arrows in the rectangles
   //Lines
@@ -279,7 +281,6 @@ function introScreen() {
   strokeWeight(5);
   line(width / 2 - 330, height / 2 - 168, width / 2 - 295, height / 2 - 168);
   line(width / 2 - 275, height / 2 - 168, width / 2 - 230, height / 2 - 168);
-  line(width / 2 - 319, height / 2 - 30, width / 2 - 319, height / 2);
   pop();
 
   //Triangles
@@ -299,14 +300,6 @@ function introScreen() {
     height / 2 - 170,
     width / 2 - 245,
     height / 2 - 185
-  );
-  triangle(
-    width / 2 - 335,
-    height / 2 - 25,
-    width / 2 - 320,
-    height / 2 - 47,
-    width / 2 - 305,
-    height / 2 - 25
   );
 }
 

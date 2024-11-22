@@ -1,5 +1,12 @@
 /*Moon lander game with a alien theme*/
+//Function to set up canvas size, stars generator, alien position,
+//and person position
+function setup() {
+  createCanvas(900, 800);
 
+  //Stars generator calling
+  starsGenerator(500);
+}
 //No stroke for better visuals (in my opinion)
 noStroke();
 
@@ -29,15 +36,6 @@ let loseSpeed = 2.1;
 //Person position
 let personX;
 let personY;
-
-//Function to set up canvas size, stars generator, alien position,
-//and person position
-function setup() {
-  createCanvas(900, 800);
-
-  //Stars generator calling
-  starsGenerator(500);
-}
 
 //Function to generate randomized stars in the background
 //Taken help from Garrits videos

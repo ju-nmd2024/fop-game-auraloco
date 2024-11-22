@@ -92,7 +92,7 @@ function resetAlienPos() {
   characterX = width / 2;
   characterY = 70;
   falling = true;
-  gravity = 3;
+  gravity = 2;
   landSpeed = 0;
 }
 

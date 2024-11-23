@@ -321,7 +321,7 @@ function gameScreen() {
   //If alien has landed on grass the falling stops
   if (characterY + 100 * 0.8 >= height - 170) {
     falling = false;
-    characterY = height - 170 - 150 * 0.8;
+    characterY = height - 160 - 150 * 0.8;
 
     landSpeed = abs(gravity);
     checkLanding();

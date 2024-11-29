@@ -344,7 +344,7 @@ function gameScreen() {
 
   //Alien and person drawn each time the game starts
   person(personX, personY, 0.5);
-  alien(characterX, characterY, 0.8);
+  alien(characterX, characterY, 0.8); 
 }
 
 //Function for the end screen
